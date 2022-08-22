@@ -1,0 +1,44 @@
+FORMA #1: A través del archivo Strings.xml
+
+1 - Nos vamos al archivo Strings.xml y lo abrimos. (Res –> Values –> Strings.xml)
+2 - Dentro del código que ya tiene el archivo crearemos una etiqueta xml tipo String-array
+asignándole un nombre a la lista e insertando los items que aparecerán en la lista:
+
+<resources>
+<string name="app_name">Tipos_Layouts</string>
+<string-array name="lista_paises">
+<item>--Seleccione--</item>
+<item>Nicaragua</item>
+<item>El salvador</item>
+<item>Honduras</item>
+<item>Panamá</item>
+<item>Costa Rica</item>
+<item>Guatemala</item>
+</string-array>
+</resources>
+
+3 - Ahora debemos de elegir cualquiera de estas dos opciones:
+
+Opción A: Nos vamos a la interfaz gráfica y buscamos la propiedad entries y escribimos:
+				entries: @array/lista_paises
+
+Opción B: Nos vamos al archivo .java donde se encuentra el spinner:
+
+ArrayAdapter<String> adaptador<
+ArrayList<String> Lista_paises;
+Lista_paises = new ArrayList<String>();
+Lista_paises.add("---Seleccione---");
+
+adaptador = new ArrayAdapter<>(getApplicationContext(),android.R.layout.simple_spinner_item,Lista_paises);
+Mi_spinner.setAdapter(adaptador); //En esta linea se asignan los elementos al spinner
+
+
+//////////////////////////////////////////////////////////////////////////
+
+FORMA #2: A través de un array
+
+En el archivo .java donde se encuentra el spinner:
+
+String []opciones = {"opcion 1","opcion 2","opcion 3","opcion 4"};
+ArrayAdapter<String> adaptador = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,opciones);
+Mi_spinner.setAdapter(adaptador); //En esta linea se asignan los elementos al spinner

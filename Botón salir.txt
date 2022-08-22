@@ -1,0 +1,23 @@
+//Poner este código fuera del OnCreate()
+Mi_boton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                   AlertDialog.Builder mybuild = new AlertDialog.Builder(this);
+        	mybuild.setMessage("¿Desea salir de la app?");
+        	mybuild.setTitle("Salida");
+        	mybuild.setPositiveButton("SI", new DialogInterface.OnClickListener() {
+            	@Override
+            	public void onClick(DialogInterface dialog, int which) {
+                	finish();
+            	}
+                });
+        	mybuild.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            	@Override
+            	public void onClick(DialogInterface dialog, int which) {
+                	dialog.cancel();
+            	}
+        	});
+        	AlertDialog dialog = mybuild.create();
+        	dialog.show();
+            }
+});

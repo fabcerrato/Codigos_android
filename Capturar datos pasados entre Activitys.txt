@@ -1,0 +1,8 @@
+//Poner dentro del OnCreate()
+
+//Variable de tipo bundle que captura los datos
+Bundle data = this.getIntent().getExtras();
+
+//Asignando valores del bundle a cajas de texto
+ct_Nombre.setText(data.getString("Nombre"));
+ct_Edad.setText(data.getInt("Edad"));

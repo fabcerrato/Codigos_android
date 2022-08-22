@@ -1,0 +1,3 @@
+ct_Nombre.setEnabled(false); //Deshabilita el control
+
+ct_Nombre.setEnabled(true); //Habilita el control

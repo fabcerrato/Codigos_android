@@ -1,0 +1,15 @@
+1 - Antes que nada se debe crear un directorio en la carpeta resources llamada: raws (Resources>New>Directory>raws) y pegar los audios a reproducir en formato .mp3
+
+2 - En el archivo .java:
+
+//Fuera del OnCreate():
+
+SoundPool sp;
+int sonido_de_Reproduccion;
+sp = new SoundPool(1,AudioManager.STREAM_MUSIC,1);
+sonido_de_Reproduccion = sp.load(this,R.raw.mi_sonido_corto,1);
+
+//Nota: este método puede ser asignado al evento OnClick de cualquier botón
+public void AudioSoundPool(View view){
+	sp.play(sonido_de_Reproduccion,1,1,1,0,0);
+}

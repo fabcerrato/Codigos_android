@@ -1,0 +1,25 @@
+Forma #1: A través de un Método:
+
+Mi_caja_de_texto.setOnKeyListener((KeyListener) this);  //Asignamos un listener de tipo key a la caja de texto
+
+//Fuera del método OnCreate()
+@Override
+public boolean onKey(View v, int keyCode, KeyEvent event){
+	//Nota: En este ejemplo se están capturando la tecla ENTER
+	if((event.getAction()==KeyEvent.ACTION_DOWN)&&(keyCode==KeyEvent.KEYCODE_ENTER)){
+		//Acciones que se realizarán
+	}
+	return false;
+}
+
+////////////////////////////////////////////////////////////////////////////
+
+Forma #2:A través del manejador de eventos
+
+Mi_caja_de_texto.setOnKeyListener(new View.OnKeyListener() {
+	@Override
+	public boolean onKey(View view, int i, KeyEvent keyEvent) {
+		//Acciones a realizar al pulsarse la tecla
+		return false;
+	}
+});

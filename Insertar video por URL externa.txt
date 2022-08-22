@@ -1,0 +1,17 @@
+//Insertar video a través de URL (Ojo: Se debe tener conexión a internet en el dispositivo móvil)
+
+1 - Necesitamos habilitar los permisos de internet en el dispositivo (archivo AndroidManifest.xml):
+
+<uses-permission android:name=”android.permission.INTERNET” />
+
+2 - En el archivo .java:
+
+//Ejemplo de url: https://media.geeksforgeeks.org/Screenrecorder-2020-12-17-19-17-36-828.mp4?_=1
+//Otro ejemplo: https://youtu.be/JmcA9LIIXWw
+
+Uri uri = Uri.parse(“PonerAquíLaUrlDelVideo”);  
+videoView.setMediaController(new MediaController(this));
+videoView.setVideoURI(uri);
+videoView.requestFocus();
+videoView.start();
+

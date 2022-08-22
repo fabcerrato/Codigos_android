@@ -1,0 +1,5 @@
+// Si la versión android es menor que Jellybean, usa este llamado para esconder la barra de estatus.
+if (Build.VERSION.SDK_INT > 16) {
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+        WindowManager.LayoutParams.FLAG_FULLSCREEN);
+}

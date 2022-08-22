@@ -1,0 +1,6 @@
+Mi_boton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Código de lo que hará el botón
+            }
+});

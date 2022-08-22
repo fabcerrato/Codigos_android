@@ -1,0 +1,7 @@
+Mi_boton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Activity_actual.this, Activity_destino.class);
+                startActivity(i);
+            }
+});

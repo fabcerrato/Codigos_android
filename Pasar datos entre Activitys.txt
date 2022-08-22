@@ -1,0 +1,11 @@
+Mi_boton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Activity_actual.this, Activity_destino.class);
+		//Con esta linea: ct_nombre.getText().toString()); //Obtenemos el dato de caja de texto
+		i.putExtra("nombre", ct_nombre.getText().toString()); 
+		i.putExtra("apellido", ct_apellido.getText().toString());
+		i.putExtra("direccion", ct_direccion.getText().toString());
+                startActivity(i);
+            }
+});

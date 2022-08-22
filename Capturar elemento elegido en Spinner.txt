@@ -1,0 +1,10 @@
+Mi_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+	@Override
+	public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+		String elemento_seleccionado = (String) Mi_spinner.getSelectedItem();
+	}
+	@Override
+	public void onNothingSelected(AdapterView<?> adapterView) {
+		// No seleccionaron nada
+	}
+});

@@ -1,0 +1,8 @@
+// En el archivo .java:
+
+lista.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+	@Override
+	public void onItemClick(AdapterView<?> adapterView, View view, int position, long id){
+		Toast.makeText(this, "Has pulsado: "+ciudades.get(position),Toast.LENGTH_LONG).show();	
+	}
+});

@@ -1,0 +1,10 @@
+//Insertar fuera del OnCreate()
+
+@Override
+public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent i = new Intent(Activity_actual.this, Activity_destino.class);
+            startActivity(i);
+        }
+        return super.onKeyDown(keyCode, event);
+}
