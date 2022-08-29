@@ -1,0 +1,34 @@
+FORMA #1:
+
+Fuera del OnCreate():
+
+ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
+            new ActivityResultCallback<Uri>() {
+                @Override
+                public void onActivityResult(Uri uri) {
+                  // Toast.makeText(MENU_PRINCIPAL.this,uri.toString(),Toast.LENGTH_LONG).show();
+                    imagen.setImageURI(uri);
+                    URL = uri.toString();
+            }
+});
+
+En el botón:
+
+b_foto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mGetContent.launch("image/*");
+            }
+        });
+
+
+FORMA #2:
+
+public void openFolder(String location)
+{
+    // location = "/sdcard/my_folder";
+    Intent intent = new Intent(Intent.ACTION_VIEW);
+    Uri mydir = Uri.parse("file://"+location);
+    intent.setDataAndType(mydir,"application/*");    // or use */*
+    startActivity(intent);
+}
