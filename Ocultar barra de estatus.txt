@@ -1,4 +1,7 @@
-// Si la versión android es menor que Jellybean, usa este llamado para esconder la barra de estatus.
+//En el AndroidManifest reemplazar la linea del tema por:
+android:theme="@style/Theme.AppCompat.NoActionBar"
+
+//Pegar el siguiente código dentro del código JAVA de todos los activitys (dentro del OnCreate())
 if (Build.VERSION.SDK_INT > 16) {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
         WindowManager.LayoutParams.FLAG_FULLSCREEN);
