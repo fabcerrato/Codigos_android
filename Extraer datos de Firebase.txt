@@ -1,0 +1,41 @@
+//EN ESTE EJEMPLO SE REQUIERE VERIFICAR QUE EL USUARIO Y CONTRASEÑA EXISTEN EN UNA TABLA LLAMADA USUARIOS, 
+//DE SER ASÍ MOSTRARÁ EL RESTO DE DATOS DE LA TABLA
+
+String usuario = ct_usuario.getText().toString().trim(); 
+String contrasena = ct_contrasena.getText().toString().trim(); 
+
+//obtenemos la referencia de la tabla usuarios en Firebase
+DatabaseReference referencia = FirebaseDatabase.getInstance().getReference("usuarios"); 
+
+Query revisarUsuario = reference.orderByChild("usuario").equalTo(usuario);
+
+revisarUsuario.addListenerForSingleValueEvent(new ValueEventListener()){
+	@Override
+	public void onDataChange(@NonNull DataSnapshot dataSnapshot){
+		if(dataSnapshot.exist()){
+
+			String passwordBD = dataSnapshot.child(usuario).child("contrasena").getValue(String.class); 
+
+			if(passwordBD.equals(contrasena)){
+				String nombreBD = dataSnapshot.child(usuario).child("nombre").getValue(String.class);
+				String apellidoBD = dataSnapshot.child(usuario).child("apellido").getValue(String.class);
+				String direccionBD = dataSnapshot.child(usuario).child("direccion").getValue(String.class);
+				String telefonoBD = dataSnapshot.child(usuario).child("telefono").getValue(String.class);
+				
+				Intent i = new Intent(getApplicationContext(),Activity2.class);
+				i.putExtra("nombre",nombreBD);
+				i.putExtra("nombre",apellidoBD);
+				i.putExtra("nombre",direccionBD);
+				i.putExtra("nombre",telefonoBD);
+				startActivity(i);
+			} else {
+				Toast.makeText(getApplicationContext(),"Las contraseñas no coinciden",Toast.LENGHT_LONG).show();
+				contrasena.requestFocus();
+			}	
+
+		}else {
+			Toast.makeText(getApplicationContext(),"El usuario no existe",Toast.LENGHT_LONG).show();
+			usuario.requestFocus();
+		}
+	} 
+}
