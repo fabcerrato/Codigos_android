@@ -1,0 +1,82 @@
+package com.example.bd_nube;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class MainActivity extends AppCompatActivity {
+
+    FirebaseFirestore firestore;
+    EditText nombres, apellidos, empresa, cargo, usuario, contrasena;
+    RadioButton rbMasculino, rbFemenino;
+    Button registro;
+    int check; //1-masculino, 2-femenino
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        nombres = findViewById(R.id.ct_nombre);
+        apellidos = findViewById(R.id.ct_apellidos);
+        empresa = findViewById(R.id.ct_empresa);
+        cargo = findViewById(R.id.ct_cargo);
+        usuario = findViewById(R.id.ct_usuario);
+        contrasena = findViewById(R.id.ct_contrasena);
+        rbMasculino = findViewById(R.id.rb_masculino);
+        rbFemenino = findViewById(R.id.rb_femenino);
+        registro = findViewById(R.id.bt_registrarse);
+
+        nombres.requestFocus();
+
+        registro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String Nombres = nombres.getText().toString();
+                String Apellidos = apellidos.getText().toString();
+                String Empresa = empresa.getText().toString();
+                String Cargo = cargo.getText().toString();
+                String Usuario = usuario.getText().toString();
+                String Contrasena = contrasena.getText().toString();
+                Boolean genero = rbMasculino.isChecked();
+                if(genero == true) check = 1; //El rb Masculino fué seleccionado
+                else check = 2; //El rb Femenino fué seleccionado
+
+                firestore = FirebaseFirestore.getInstance();
+
+                Map<String,Object> usuarios = new HashMap<>();
+                usuarios.put("nombre",Nombres);
+                usuarios.put("apellido",Apellidos);
+                usuarios.put("empresa",Empresa);
+                usuarios.put("cargo",Cargo);
+                usuarios.put("usuario",Usuario);
+                usuarios.put("contrasena",Contrasena);
+
+                firestore.collection("usuarios").add(usuarios).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Toast.makeText(MainActivity.this, "Guardado satisfactorio", Toast.LENGTH_LONG).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(MainActivity.this, "No se pudo guardar", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
+    }
+}
