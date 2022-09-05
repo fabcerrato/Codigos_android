@@ -1,4 +1,33 @@
-FORMA #1:
+//Antes que nada debemos insertar el siguiente código en AndroidManifest.xml: Ejemplo:
+
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.imagenes_tabla">
+    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION"></uses-permission> //esta linea
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission> //esta linea
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Imagenes_Tabla"
+        android:requestLegacyExternalStorage="true"> //****************** solo esta linea ****************************
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
+
+**************** FORMA #1: ********************************
 
 Fuera del OnCreate():
 
@@ -22,13 +51,13 @@ b_foto.setOnClickListener(new View.OnClickListener() {
         });
 
 
-FORMA #2:
+*************** FORMA #2: *************************************
 
 public void openFolder(String location)
 {
     // location = "/sdcard/my_folder";
     Intent intent = new Intent(Intent.ACTION_VIEW);
     Uri mydir = Uri.parse("file://"+location);
-    intent.setDataAndType(mydir,"application/*");    // or use */*
+    intent.setDataAndType(mydir,"application/*");    // o use */*
     startActivity(intent);
 }
