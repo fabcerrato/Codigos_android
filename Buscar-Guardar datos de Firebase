@@ -1,0 +1,126 @@
+//Paso 1: Primero debemos de crear una clase nueva en el cual se guardarán los datos que vengan de la BD
+public class Post {
+    public String apellido;
+    public String cargo;
+    public String contrasena;
+    public String empresa;
+    public String nombre;
+    public String usuario;
+
+    public Post(){}
+
+    public Post(String apellido,String cargo,String contrasena, String empresa, String nombre,String usuario) {
+
+    }
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public String getCargo() {
+        return cargo;
+    }
+
+    public void setCargo(String cargo) {
+        this.cargo = cargo;
+    }
+
+    public String getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(String empresa) {
+        this.empresa = empresa;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
+    public String getContrasena() {
+        return contrasena;
+    }
+
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
+    }
+}
+
+//Paso 2: Luego codificamos el botón que buscará los datos en BD
+
+public class MainActivity extends AppCompatActivity {
+
+    FirebaseFirestore firestore;
+    EditText usuario, contrasena;
+    Button inicio_sesion;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        usuario = findViewById(R.id.ct_usuario);
+        contrasena = findViewById(R.id.ct_contrasena);
+        inicio_sesion = findViewById(R.id.bt_sesion);
+
+        inicio_sesion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String UsuarioApp = usuario.getText().toString().trim();
+                String ContrasenaApp = contrasena.getText().toString().trim();
+                firestore = FirebaseFirestore.getInstance();
+
+                try {
+                    if (!UsuarioApp.isEmpty() && !ContrasenaApp.isEmpty()) {
+                        firestore.collection("usuarios")
+                                .get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            int ConteoDocumentos = 0;
+                                            //Toast.makeText(MainActivity.this, "Valor TASK: "+task.getResult().size(), Toast.LENGTH_SHORT).show();
+                                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                                //Toast.makeText(MainActivity.this, document.getId()+ " => " + document.getData(), Toast.LENGTH_LONG).show();
+                                                Post datosBD = document.toObject(Post.class); //Guardamos todos los datos en clase Post
+                                                if (datosBD.usuario.equals(UsuarioApp) && datosBD.contrasena.equals(ContrasenaApp)) {
+                                                    //si coincide el usuario y contraseña
+                                                    Toast.makeText(MainActivity.this, "Inicio sesión Exitoso", Toast.LENGTH_LONG).show();
+                                                    Intent i = new Intent(getApplicationContext(), MainActivity3.class);
+                                                    startActivity(i);
+                                                } else if (datosBD.usuario.equals(UsuarioApp) || datosBD.contrasena.equals(ContrasenaApp)) {
+                                                    Toast.makeText(MainActivity.this, "Usuario o contraseña incorrecta", Toast.LENGTH_LONG).show();
+                                                    usuario.requestFocus();
+                                                    break; //Forzar salir del ciclo For
+                                                }
+                                                ConteoDocumentos = ConteoDocumentos + 1; //cantidad de documentos que se han revisado el usuario/contraseña
+                                            }//fin for
+                                            if (ConteoDocumentos == task.getResult().size()) { //no se encontró el usuario o contraseña
+                                                Toast.makeText(MainActivity.this, "No existe el usuario", Toast.LENGTH_SHORT).show();
+                                            }
+                                        } else {
+                                            Toast.makeText(MainActivity.this, "Error al obtener los documentos " + task.getException(), Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                });
+                    }else Toast.makeText(getApplicationContext(), "Por favor relleno todos los campos", Toast.LENGTH_LONG).show();
+
+                } catch(Exception e){ Toast.makeText(getApplicationContext(), "Ocurrió un problema", Toast.LENGTH_LONG).show(); }
+            }
+        });
+    }
+}
