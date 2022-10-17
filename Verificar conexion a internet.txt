@@ -1,0 +1,21 @@
+//Verificar si se tiene o no conexion a internet
+
+    ConnectivityManager cm = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+    NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+    boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    if(isConnected == true) Toast.makeText(this, "Conectado a internet", Toast.LENGTH_SHORT).show();
+    else Toast.makeText(this, "Desconectado de internet", Toast.LENGTH_SHORT).show();
+
+//Verificar el tipo de conexión (datos, wifi, etc.)
+
+    ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+    boolean isMetered = cm.isActiveNetworkMetered();
+
+/*
+Los costos de datos móviles suelen ser significativamente más altos que los costos de Wi-Fi y Ethernet. Cuando usas una conexión de uso medido, debes intentar reducir el consumo de datos de tu app o incluso demorarla hasta que obtengas una conexión no medida.
+*/
+
+
+/* Nota: Si tu app necesita admitir Android 4.0 (API nivel 15) y versiones anteriores, usa ConnectivityManagerCompat.isActiveNetworkMetered en lugar de ConnectivityManager.isActiveNetworkMetered() */
+
