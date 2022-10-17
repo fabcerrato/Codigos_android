@@ -1,0 +1,107 @@
+1. En el AndroidManifest.xml
+
+<uses-permission android:name="android.permission.INTERNET"/>
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+
+2. En el build.gradle (App):
+
+Apartado dependencies:
+
+implementation 'com.github.bumptech.glide:glide:4.8.0'
+annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
+
+implementation 'com.google.firebase:firebase-firestore:24.3.0'
+implementation 'com.google.firebase:firebase-database:20.0.6'
+implementation 'com.google.firebase:firebase-core:9.6.1'
+implementation 'com.google.firebase:firebase-storage:9.6.1'
+
+Apartado plugins:
+
+id 'com.google.gms.google-services'
+
+
+3. En el archivo .java de nuestro activity:
+
+$$$Variables a utilizar:
+Button Bt_cargar;
+StorageReference dbStorageRef;
+ListView Mi_Lista;
+ArrayList<String> imageList;
+AdaptadorImagenes adaptador;
+
+Bt_cargar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                StorageReference pathReference = dbStorageRef.getStorage().getReferenceFromUrl("https://firebasestorage.googleapis.com/v0/b/prueba-guardado-		firebase.appspot.com/o/fotos%2F12689?alt=media&token=cc111981-87fa-477b-a104-a5319dc68b17");
+    		pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+        		@Override
+        		public void onSuccess(Uri uri) {
+            			//String imageURL = uri.toString();
+            			Glide.with(MainActivity2.this).load(uri.toString()).into(Prev_imagen);
+        		}
+    		}).addOnFailureListener(new OnFailureListener() {
+        		@Override
+        		public void onFailure(@NonNull Exception e) {
+            			Toast.makeText(MainActivity2.this, "No se pudo cargar", Toast.LENGTH_SHORT).show();
+        		}
+    		});
+  	    }
+});
+
+4. Creamos un nuevo Layout Resource File .xml llamado "lista_imagenes" en la carpeta de layouts para diseñar cómo aparecerán las imágenes del Listview, en este caso solo convertiremos el contenedor principal a LinearLayout vertical y la arrastramos un Imageview llamado mi_Imagen. 
+
+
+5. Creamos una clase que será el adaptador:
+
+public class AdaptadorImagenes extends BaseAdapter {
+    private Context contexto;
+    private int layout;
+    private ArrayList<String> imagenes;
+
+    public AdaptadorImagenes(Context context, ArrayList<String> imagenes) {
+        contexto = context;
+        this.layout = layout;
+        this.imagenes = imagenes;
+    }
+
+    @Override
+    public int getCount() {
+        return imagenes.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return this.imagenes.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(int position, View v, ViewGroup parent) {
+
+        //Inflamos la vista con nuestro propio layout
+        LayoutInflater layoutInflater = LayoutInflater.from(contexto);
+
+        v= layoutInflater.inflate(R.layout.lista_imagenes, null);
+
+        // Referenciamos el elemento a modificar y lo rellenamos
+        ImageView imagen = (ImageView) v.findViewById(R.id.mi_Imagen);
+
+        //Cargar la imagen en la lista
+        Glide.with(contexto).load(imagenes.get(position)).into(imagen);
+
+        //Devolvemos la vista inflada
+        return v;
+    }
+}
+
+
+
+
+
+
+

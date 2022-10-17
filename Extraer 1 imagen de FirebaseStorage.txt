@@ -1,0 +1,53 @@
+1. En el AndroidManifest.xml
+
+<uses-permission android:name="android.permission.INTERNET"/>
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+
+2. En el build.gradle (App):
+
+Apartado dependencies:
+
+implementation 'com.github.bumptech.glide:glide:4.8.0'
+annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
+
+implementation 'com.google.firebase:firebase-firestore:24.3.0'
+implementation 'com.google.firebase:firebase-database:20.0.6'
+implementation 'com.google.firebase:firebase-core:9.6.1'
+implementation 'com.google.firebase:firebase-storage:9.6.1'
+
+Apartado plugins:
+
+id 'com.google.gms.google-services'
+
+
+3. En el archivo .java de nuestro activity:
+
+$$$Variables a utilizar:
+Button Bt_cargar;
+StorageReference dbStorageRef;
+
+Bt_cargar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                StorageReference pathReference = dbStorageRef.getStorage().getReferenceFromUrl("https://firebasestorage.googleapis.com/v0/b/prueba-guardado-		firebase.appspot.com/o/fotos%2F12689?alt=media&token=cc111981-87fa-477b-a104-a5319dc68b17"); //Token de la imagen de firebase storage
+    		pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+        		@Override
+        		public void onSuccess(Uri uri) {
+            			//String imageURL = uri.toString();
+            			Glide.with(MainActivity.this).load(uri.toString()).into(Prev_imagen);
+        		}
+    		}).addOnFailureListener(new OnFailureListener() {
+        		@Override
+        		public void onFailure(@NonNull Exception e) {
+            			Toast.makeText(MainActivity.this, "No se pudo cargar", Toast.LENGTH_SHORT).show();
+        		}
+    		});
+  	    }
+});
+
+
+
+
+
+

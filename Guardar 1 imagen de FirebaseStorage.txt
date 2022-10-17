@@ -1,0 +1,82 @@
+1. En el AndroidManifest.xml
+
+<uses-permission android:name="android.permission.INTERNET"/>
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+
+2. En el build.gradle (App):
+
+Apartado dependencies:
+
+implementation 'com.github.bumptech.glide:glide:4.8.0'
+annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
+
+implementation 'com.google.firebase:firebase-firestore:24.3.0'
+implementation 'com.google.firebase:firebase-database:20.0.6'
+implementation 'com.google.firebase:firebase-core:9.6.1'
+implementation 'com.google.firebase:firebase-storage:9.6.1'
+
+Apartado plugins:
+
+id 'com.google.gms.google-services'
+
+
+3. En el archivo .java de nuestro activity:
+
+
+$$$Variables a utilizar:
+
+Button Bt_subir;
+StorageReference dbStorageRef;
+private static final int GALLERY_INTENT = 1;
+ProgressDialog progressDialog;
+ImageView Prev_imagen;
+
+---Dentro del OnCreate():
+
+Bt_subir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progressDialog = new ProgressDialog(this);
+		Intent i = new Intent();
+                i.setType("image/*");
+                i.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(i,GALLERY_INTENT);
+  	    }
+});
+
+
+---Fuera del OnCreate():
+
+//ESTE SEGMENTO DE CÓDIGO ABRE EL EXPLORADOR DE ARCHIVOS, ALMACENA LA IMAGEN EN FIREBASESTORAGE, Y MUESTRA LA IMAGEN EN UN IMAGEVIEW
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == GALLERY_INTENT && resultCode == RESULT_OK && data != null && data.getData() != null){
+
+            progressDialog.setTitle("Subir foto");
+            progressDialog.setMessage("Subiendo foto a Firebase...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+
+            Uri uri = data.getData();
+            StorageReference dbStorageRef = FirebaseStorage.getInstance().getReference();
+            StorageReference filepath = dbStorageRef.child("fotos").child(uri.getLastPathSegment());
+            filepath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    progressDialog.dismiss(); //Quitar el progressDialog
+                    //Uri DescargarFoto = Uri.parse(taskSnapshot.getMetadata().getReference().getDownloadUrl().toString());
+                    Glide.with(MainActivity2.this).load(uri).into(Prev_imagen);
+                    CargarTodasLasImagenes();
+                    Toast.makeText(MainActivity2.this, "Se subió satisfactoriamente", Toast.LENGTH_SHORT).show();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(MainActivity2.this, "No se pudo subir", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }else Toast.makeText(MainActivity2.this, "Data vacía", Toast.LENGTH_SHORT).show();
+    }
+
