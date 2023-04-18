@@ -1,0 +1,12 @@
+1 - Pegue la imagen gif en la carpeta /drawable del proyecto.
+
+2 - Abrimos el archivo build.gradle(App) y buscamos el segmento de código "dependencies{}" e insertamos la siguiente línea de código:
+
+	implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.24'
+
+3 - Ahora nos vamos al archivo .xml que contendrá el GIF y escribiremos:
+
+<pl.droidsonroids.gif.GifImageView 
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:src="@drawable/Mi_gif" />
