@@ -1,0 +1,83 @@
+package com.example.splash_loginfirebase;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+
+public class MainActivity2 extends AppCompatActivity {
+
+    EditText CT_correo, CT_Contrasena;
+    Button Boton_inicio;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main2);
+        CT_correo = findViewById(R.id.ct_correo);
+        CT_Contrasena = findViewById(R.id.ct_contrasena);
+        Boton_inicio = findViewById(R.id.bt_inicio);
+        Boton_inicio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Consultar_Usuario(view);
+            }
+        });
+    }
+    public boolean verificar_conexion(){
+        ConnectivityManager cm = (ConnectivityManager)
+                this.getSystemService(MainActivity.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null
+                && activeNetwork.isConnectedOrConnecting();
+        if(isConnected == true) return true;
+        else return false;
+    }
+    public void Consultar_Usuario(View view) {
+        boolean Estado = verificar_conexion();
+        if (Estado == true) {
+
+            String correo = CT_correo.getText().toString();
+            String contrasena = CT_Contrasena.getText().toString();
+
+            if (correo.isEmpty() || contrasena.isEmpty()) {
+                Toast.makeText(this, "Por favor rellene todos los campos", Toast.LENGTH_LONG).show();
+                CT_correo.requestFocus(); //poner el foco en la caja de texto usuario
+                return;
+            }else{
+
+            FirebaseAuth mAuth;
+            mAuth = FirebaseAuth.getInstance();
+            mAuth.signInWithEmailAndPassword(correo, contrasena)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                Intent intent = new Intent(MainActivity2.this, MainActivity3.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Toast.makeText(MainActivity2.this, "Correo y/o contraseña incorrecta", Toast.LENGTH_SHORT).show();
+                                CT_correo.requestFocus();
+                            }
+                        }
+                    });//Codigo para autenticar
+            }
+        } else {
+            Toast.makeText(this, "Por Favor Conectese a Internet", Toast.LENGTH_SHORT).show();
+        }
+    }
+}
