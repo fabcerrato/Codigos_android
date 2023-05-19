@@ -1,0 +1,14 @@
+mAuth.createUserWithEmailAndPassword(email, password)
+        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(this, "Usuario creado correctamente", Toast.LENGTH_SHORT).show();
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    updateUI(user);
+                } else {
+                    Toast.makeText(Activity.this, "Ocurrió un fallo",Toast.LENGTH_SHORT).show();
+                    updateUI(null);
+                }
+            }
+        });
