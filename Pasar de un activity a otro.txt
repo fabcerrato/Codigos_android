@@ -1,7 +1,18 @@
-Mi_boton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Activity_actual.this, Activity_destino.class);
-                startActivity(i);
-            }
-});
+1) En el primer Activity:
+
+Intent i = new Intent(Activity_actual.this, Activity_destino.class);
+//Encapsulamiento de los datos que serán pasados
+i.putExtra("nombre", ct_nombre.getText().toString()); 
+i.putExtra("apellido", ct_apellido.getText().toString());
+i.putExtra("direccion", ct_direccion.getText().toString());
+startActivity(i);
+
+2) En el segundo Activity:
+
+//Variable de tipo bundle que captura los datos
+Bundle data = this.getIntent().getExtras();
+
+//Paso de valores del bundle a las variables locales
+String Nombre = data.getString("nombre");
+String Apellido = data.getString("apellido");
+String Direccion = data.getString("direccion");
