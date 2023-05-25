@@ -1,0 +1,41 @@
+1) Habilitamos la carpeta de menu en la carpeta res; para ello damos clic derecho sobre res y presionamos New - Android Resource Directory, en la ventana que nos aparece ponemos un nombre al menu (Directory name) y en la lista desplegable del apartado Resource type elegiremos Menu; clic en OK. Al hacer esto se nos habilitará la carpeta menu coon el archivo XML donde diseñaremos el menú.
+
+2) Dentro del código del archivo XML a través de la etiqueta "item" pondremos cada una de las opciones que componen el menú. Nota: Si deseamos tener submenús de menús simplemente agregaremos otra etiqueta "menu" y dentro de ella las opciones en etiquetas "item" por ejemplo:
+
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/nuevo" android:title="Nuevo" app:showAsAction="never">
+        <menu>
+            <item android:id="@+id/platillo" android:title="Platillo" app:showAsAction="never"/>
+            <item android:id="@+id/bebida" android:title="Bebida" app:showAsAction="never"/>
+        </menu>
+    </item>
+    <item android:id="@+id/ayuda" android:title="Ayuda" app:showAsAction="never"/>
+</menu>
+
+3) Finalmente en el archivo java de la interfaz donde aparecerá el menú agregamos los siguientes bloques de códigos (fuera del OnCreate()):
+
+    /* Metodo para mostrar el menú en pantalla */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.mi_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    /* Metodo para controlar las acciones de las opciones del menú */
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        //return super.onOptionsItemSelected(item);
+        int id = item.getItemId();
+        if(id == R.id.platillo) {
+            Toast.makeText(this, "Ha presionado la opcion Nuevo Platillo", Toast.LENGTH_SHORT).show();
+            return true;
+        } if(id == R.id.bebida) {
+            Toast.makeText(this, "Ha presionado la opcion Nueva Bebida", Toast.LENGTH_SHORT).show();
+            return true;
+        }if(id == R.id.ayuda){
+                Toast.makeText(this, "Ha presionado la opcion Ayuda", Toast.LENGTH_SHORT).show();
+                return true;
+        }else return super.onOptionsItemSelected(item);
+    }
