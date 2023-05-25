@@ -1,0 +1,17 @@
+1 - Arrastre el control listView al activity donde mostrará la lista
+
+2 - En el archivo .java del activity donde está el listView:
+
+private ListView lista;
+private ArrayList<String> ciudades;
+lista = (ListView) findViewById(R.id.listview);
+ciudades = new ArrayList<String>();
+ciudades.add("León");
+ciudades.add("Chinandega");
+ciudades.add("Estelí");
+ciudades.add("Granada");
+ciudades.add("Managua”);
+
+ArrayAdapter<String> adaptador=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, ciudades);
+
+lista.setAdapter(adaptador);
