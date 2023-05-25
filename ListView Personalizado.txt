@@ -1,0 +1,113 @@
+a) Da clic derecho en layout (res->layout), y selecciona New->Layout resource file
+
+b) En la ventana que se abre, escribe en el campo File name el nombre del archivo; por ejemplo: Lista_Personalizada, 
+y como Root element: LinearLayout (o cualquier contenedor que deseemos) Pulse Ok.
+
+c) Diseñe dentro del contenedor del archivo que creó en el paso anterior cómo es que espera se muestren los elementos de la lista;
+por ejemplo: Si deseamos que cada elemento de la lista muestre una imagen y un texto alusivo podemos diseñarlo de la siguiente manera:
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        app:srcCompat="@drawable/Img_ciudad" />
+
+    <TextView
+        android:id="@+id/textView_Nombre"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:text="TextView" />
+</LinearLayout>
+
+Nota: Puede fijarse que el textView no se le agregó la propiedad Text; ya que ésta será modificada al momento de la ejecución de la aplicación.
+
+d) Nos vamos al explorador de proyectos y seleccionamos la primera carpeta dentro de java (app->java->com.example.nombre_proyecto) y creamos una nueva clase Java (File->New->Java Class) y le asignamos un nombre; Por ejemplo: MyAdapter
+
+e) En el código que abrirá lo podemos modificar de la siguiente manera:
+
+public class MiAdaptador extends BaseAdapter {
+    private Context context;
+    private int layout;
+    private ArrayList<String> nombres;
+
+    public MiAdaptador(Context context, int layout,ArrayList<String> nombres) {
+        this.context = context;
+        this.layout = layout;
+        this.nombres = nombres;
+    }
+
+    @Override
+    public int getCount() {
+        return this.nombres.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return this.nombres.get(position);
+    }
+
+    @Override
+    public long getItemId(int id) {
+        return id;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup viewGroup) {
+        // Copiamos la vista
+        View v = convertView;
+
+        //Inflamos la vista con nuestro propio layout
+        LayoutInflater layoutInflater = LayoutInflater.from(this.context);
+        v = layoutInflater.inflate(R.layout.Lista_Personalizada, null);
+
+        // Valor actual según la posición
+        String NombreActual  = nombres.get(position);
+
+        // Referenciamos el elemento a modificar y lo rellenamos
+        TextView textView = (TextView) v.findViewById(R.id.textView_Nombre);
+        textView.setText(NombreActual);
+        //Devolvemos la vista inflada
+        return v;
+    }
+}// fin de la clase
+
+f) Finalmente en el .JAVA del activity donde mostraremos la lista, arrastramos el control ListView de la caja de herramientas, le asignamos un nombre y
+mandamos a llamar a la lista personalizada.
+
+//declaramos las variables que utiizaremos
+ListView Mi_lista;
+ArrayList<String> names;
+
+//Dentro del método OnCreate():
+listview=findViewById(R.id.lista);
+
+Nombres = new ArrayList<String>();
+Nombres.add("León");
+Nombres.add("Chinandega");
+Nombres.add("Estelí");
+Nombres.add("Granada");
+Nombres.add("Managua");
+
+ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, Nombres);
+
+MiAdaptador miAdaptador = new MiAdaptador(this, R.layout.Lista_Personalizada, Nombres);
+Mi_lista.setAdapter(miAdaptador);
+
+
+
+
+
+
+
+
+
+
