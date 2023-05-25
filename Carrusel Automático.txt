@@ -1,0 +1,53 @@
+1) En el archivo XML:
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#6CD3C7"
+    tools:context=".MainActivity">
+
+    <ViewFlipper
+        android:id="@+id/v_flipper"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_centerVertical="true" />
+
+</RelativeLayout>
+
+2) Guardar las imágenes a mostrar en el carrusel en la carpeta Drawable
+
+3) En el .java
+
+public class MainActivity extends AppCompatActivity {
+    ViewFlipper v_flipper;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        int imagenes[]={R.drawable.imagen_1,R.drawable.imagen_2,R.drawable.imagen_3,R.drawable.imagen_4,R.drawable.imagen_5,R.drawable.imagen_6};
+
+        v_flipper = findViewById(R.id.v_flipper);
+
+        //Código para que se mantenga el ciclo (loop)
+        for(int i=0;i<imagenes.length;i++){
+            carrusel_imagenes(imagenes[i]);
+        }
+    }
+
+    public void carrusel_imagenes(int imagen){
+        ImageView i = new ImageView(this);
+        i.setBackgroundResource(imagen);
+        v_flipper.addView(i);
+        v_flipper.setFlipInterval(4000); //milisegundos
+        v_flipper.setAutoStart(true);
+
+        //Animación
+        v_flipper.setInAnimation(this, android.R.anim.slide_in_left);
+        v_flipper.setOutAnimation(this, android.R.anim.slide_out_right);
+    }
+}

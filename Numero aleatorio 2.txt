@@ -1,0 +1,6 @@
+Random aleatorio = new Random(System.currentTimeMillis());
+int num_aleatorio = aleatorio.nextInt(100);
+
+ texto.setText(String.valueOf(num_aleatorio));
+
+aleatorio.setSeed(System.currentTimeMillis());
