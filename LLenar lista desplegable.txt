@@ -1,6 +1,7 @@
 FORMA #1: A través del archivo Strings.xml
 
 1 - Nos vamos al archivo Strings.xml y lo abrimos. (Res –> Values –> Strings.xml)
+
 2 - Dentro del código que ya tiene el archivo crearemos una etiqueta xml tipo String-array
 asignándole un nombre a la lista e insertando los items que aparecerán en la lista:
 
