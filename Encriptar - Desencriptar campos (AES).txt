@@ -1,0 +1,68 @@
+public class MainActivity extends AppCompatActivity {
+    
+    EditText Ct_password, Ct_pass_encriptado, Ct_decrypt; //Referencias a las cajas de texto
+/*El campo pass sirve para encriptar el dato con una contraseña de acceso (la contraseña será lo que miramos dentro de las comillas dobles)*/
+    static String pass = "$alfg&df%sml", salida=""; 
+    Button encriptar, desencriptar; //Botones que realizarán los procedimientos
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        Ct_password = findViewById(R.id.ct_password);
+        Ct_pass_encriptado = findViewById(R.id.ct_pass_encrypted);
+        Ct_decrypt = findViewById(R.id.ct_decrypt);
+        encriptar = findViewById(R.id.bt_encriptar);
+        desencriptar = findViewById(R.id.bt_desencriptar);
+
+        encriptar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    salida = Encriptar_contrasena_AES();
+                    Ct_pass_encriptado.setText(salida);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
+        desencriptar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    Ct_decrypt.setText(Desencriptar_contrasena_AES());
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public String Encriptar_contrasena_AES () throws Exception {
+        SecretKeySpec secretKey = generarKey(pass); //contraseña de encriptación
+        Cipher cipher = Cipher.getInstance("AES");
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+        byte[] datosEncriptadosBytes = cipher.doFinal(Ct_password.getText().toString().getBytes());
+        String datosEncriptadosString = Base64.getEncoder().encodeToString(datosEncriptadosBytes);
+        return datosEncriptadosString;
+    }
+
+    public String Desencriptar_contrasena_AES() throws Exception{
+        SecretKeySpec secretKey = generarKey(pass); //contraseña de desencriptación
+        Cipher cipher = Cipher.getInstance("AES");
+        cipher.init(Cipher.DECRYPT_MODE, secretKey);
+        byte[] datosDesencriptados = Base64.getDecoder().decode(salida); //decodificación
+        byte[] datosDesencriptadosBytes = cipher.doFinal(datosDesencriptados);
+        String datosDesencriptadosString = new String(datosDesencriptadosBytes);
+        return datosDesencriptadosString;
+    }
+    //Método para generar asociar la contraseña con el texto de encriptación
+    public SecretKeySpec generarKey(String pass) throws Exception {
+        MessageDigest sha = MessageDigest.getInstance("SHA-256");
+        byte[] key = pass.getBytes("UTF-8");
+        key = sha.digest(key);
+        SecretKeySpec secretKey = new SecretKeySpec(key,"AES");
+        return secretKey;
+    }
+}

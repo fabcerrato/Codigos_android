@@ -1,0 +1,52 @@
+// 1- Abre el archivo gradle(App) y agrega la siguiente línea a Dependencies
+
+implementation group: 'at.favre.lib', name: 'bcrypt', version: '0.9.0'
+
+// 2- sincronice el proyecto
+
+// 3- Obtenga la cadena que desea encriptar e instancie la clase Bcrypt
+
+	String contrasena_ct = Ct_password.getText().toString().trim(); //Contraseña de una caja de texto
+        if(contrasena_ct.isEmpty()){
+            Toast.makeText(this, "Rellene el campo de la contraseña", Toast.LENGTH_SHORT).show(); Ct_password.requestFocus();
+        }else {
+            String bcryptHashString = BCrypt.withDefaults().hashToString(12, contrasena_ct.toCharArray()); //Cadena ya encriptada
+            BCrypt.Result result = BCrypt.verifyer().verify(contrasena_ct.toCharArray(), bcryptHashString); //Verificación de la encriptación
+
+            if(result.verified){
+                Ct_pass_encriptado.setText(bcryptHashString);
+            }else {
+                Toast.makeText(this, "No se encriptó, ingrese un contraseña más corta", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+// 4- Si desea verificar que la contraseña ingresada en bd es igual que la ingresada en una caja de texto hay que hacer lo siguiente
+
+	String contrasena_ct = Ct_pass.getText().toString().trim(); //obtenemos la contraseña de la caja de texto
+        if(contrasena_ct.isEmpty()){
+            Toast.makeText(this, "El campo está vacío", Toast.LENGTH_SHORT).show();
+        }else {
+	    String usuario = Ct_usuario.getText.toString().trim(); //usuario
+
+	    FirebaseDatabase database = FirebaseDatabase.getInstance();
+            database.getReference("/MisUsuarios/Usuarios/"+usuario+"/")
+                .addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    String hash = snapshot.child("contrasena").getValue().toString();
+                    BCrypt.Result result = BCrypt.verifyer().verify(contrasena_ct.toCharArray(), hash);
+                    if(result.verified){
+                        Toast.makeText(MainActivity.this, "Las contraseñas coinciden", Toast.LENGTH_SHORT).show();
+                    }else {
+                        Toast.makeText(MainActivity.this, "Las contraseñas NO coinciden", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+	}
