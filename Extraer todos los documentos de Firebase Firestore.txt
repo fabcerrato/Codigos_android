@@ -1,17 +1,46 @@
-//previamente debemos de crear una clase en nuestro proyecto el cual contendrá los mismos campos que extraeremos de la base de datos
+//Paso 1: Previamente debemos de crear una clase en nuestro proyecto el cual contendrá los mismos campos que extraeremos de la base de datos
+//Por ejemplo:
 
-//El código para extraer los datos de firebase firestore es el siguiente
+// Post.java
+public class Post {
+    public String nombre;
+    public String correo;
 
-        //Esta lista es por si queremos mostrar los datos extraidos de firebase
-        ListView Lista;
+    public Post(){} //Constructor sin parámetros
 
+    //Constructor con parámetros
+    public Post(String nombre, String correo) {
+        this.nombre = nombre;
+        this.correo = correo;
+    }
+   //Métodos Setter y Getter de los campos
+    public String getCorreo() {
+        return correo;
+    }
 
-        CollectionReference RefColeccion = FirebaseFirestore.getInstance().collection("Mi_coleccion");
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+}
+
+//Paso 2: El código para extraer los datos de firebase firestore es el siguiente
+
+        //Para este ejemplo la tabla se llama "usuarios"
+        CollectionReference RefColeccion = FirebaseFirestore.getInstance().collection("usuarios");
 
         RefColeccion.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>(){
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
+                //Esto es para mostrar los datos luego en un Toast
                 ArrayList<String> lista = new ArrayList<>();
 
                 if (queryDocumentSnapshots.isEmpty()) {
@@ -20,18 +49,17 @@
                     for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
 
                         //Guardamos los datos del documento actual en la clase User
-                        User listaRecibida = documentSnapshot.toObject(User.class);
+                        Post listaRecibida = documentSnapshot.toObject(Post.class);
 
-                       //Por ejemplo: Si desea almacenar los datos de la clase User en un ArrayList para mostrarlos al final del ciclo
+                       //Almacenamos los datos extraidos para luego mostrarlos
                         String data = "";
                         data = listaRecibida.getUsuario() + " " + listaRecibida.getApellido() + " " + listaRecibida.getCorreo();
                         lista.add(data);
-
                     }
+                    //Creamos el adaptador que mostrará la lista de datos
                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, lista);
                     MyAdapter myAdapter = new MyAdapter(MainActivity.this, R.layout.list_item, lista);
-                    Lista.setAdapter(myAdapter);
-
+                    Lista.setAdapter(myAdapter); //En este punto la lista ya tiene los datos y se mostrarán en la Lista
                 }//FIN ELSE
             }//FIN onSuccess
         });
