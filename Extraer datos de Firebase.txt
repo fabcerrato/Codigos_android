@@ -1,41 +1,87 @@
-//EN ESTE EJEMPLO SE REQUIERE VERIFICAR QUE EL USUARIO Y CONTRASEÑA EXISTEN EN UNA TABLA LLAMADA USUARIOS, 
-//DE SER ASÍ MOSTRARÁ EL RESTO DE DATOS DE LA TABLA
+// EJEMPLO
+//Se requiere verificar si un correo existe en FirebaseFirestore; para ello se consultará registro a registro preguntando por el campo que buscamos
 
-String usuario = ct_usuario.getText().toString().trim(); 
-String contrasena = ct_contrasena.getText().toString().trim(); 
+// Paso 1
+String correo = ct_correo.getText().toString().trim();  // Capturamos el correo que escribió el usuario en la insterfaz gráfica
 
-//obtenemos la referencia de la tabla usuarios en Firebase
-DatabaseReference referencia = FirebaseDatabase.getInstance().getReference("usuarios"); 
+// Paso 2
+// Creamos una clase .java (new->Java Class) que guardará todos los datos del documento actual que se esté leyendo
 
-Query revisarUsuario = reference.orderByChild("usuario").equalTo(usuario);
+//Nota: Supongamos que cada registro de la base de datos tiene 4 campos: nombre, apellido, cargo y correo
+// Post.java
+public class Post {
+    public String nombre;
+    public String apellido;
+    public String cargo;
+    public String correo;
 
-revisarUsuario.addListenerForSingleValueEvent(new ValueEventListener()){
-	@Override
-	public void onDataChange(@NonNull DataSnapshot dataSnapshot){
-		if(dataSnapshot.exist()){
+    public Post(){} //Constructor sin parámetros
 
-			String passwordBD = dataSnapshot.child(usuario).child("contrasena").getValue(String.class); 
+    //Constructor con parámetros
+    public Post(String nombre, String apellido, String cargo, String correo) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.cargo = cargo;
+        this.correo = correo;
+        
+    }
+   //Métodos Setter y Getter de los campos
+    public String getApellido() {
+        return apellido;
+    }
 
-			if(passwordBD.equals(contrasena)){
-				String nombreBD = dataSnapshot.child(usuario).child("nombre").getValue(String.class);
-				String apellidoBD = dataSnapshot.child(usuario).child("apellido").getValue(String.class);
-				String direccionBD = dataSnapshot.child(usuario).child("direccion").getValue(String.class);
-				String telefonoBD = dataSnapshot.child(usuario).child("telefono").getValue(String.class);
-				
-				Intent i = new Intent(getApplicationContext(),Activity2.class);
-				i.putExtra("nombre",nombreBD);
-				i.putExtra("nombre",apellidoBD);
-				i.putExtra("nombre",direccionBD);
-				i.putExtra("nombre",telefonoBD);
-				startActivity(i);
-			} else {
-				Toast.makeText(getApplicationContext(),"Las contraseñas no coinciden",Toast.LENGHT_LONG).show();
-				contrasena.requestFocus();
-			}	
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
 
-		}else {
-			Toast.makeText(getApplicationContext(),"El usuario no existe",Toast.LENGHT_LONG).show();
-			usuario.requestFocus();
-		}
-	} 
+    public String getCargo() {
+        return cargo;
+    }
+
+    public void setCargo(String cargo) {
+        this.cargo = cargo;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 }
+
+// Paso 3
+// Obtenemos la referencia de la tabla que estemos trabajando de Firebase
+
+CollectionReference RefColeccion = FirebaseFirestore.getInstance().collection("usuarios"); //La tabla en Firebase se llama usuarios
+
+// Paso 4
+// Creamos el evento que leerá los datos de Firebase
+
+RefColeccion.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>(){
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                if (queryDocumentSnapshots.isEmpty()) {
+                    Toast.makeText(MainActivity.this, "No se leyeron los datos", Toast.LENGTH_SHORT).show();
+                } else {
+                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+
+                        //Guardamos los datos temporalmente del documento actual que se está leyendo en la clase Post
+                        Post datosRecibidos = documentSnapshot.toObject(Post.class);
+
+			//Preguntamos si del documento actual de Firebase, campo correo coincide con el correo ingresado por el usuario
+			if(datosRecibidos.getCorreo().equals(correo)  Toast.makeText(this, "Correo encontrado", Toast.LENGTH_SHORT).show();
+                    }
+                }//FIN ELSE
+            }//FIN onSuccess
+        });
