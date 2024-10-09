@@ -1,24 +1,4 @@
-package com.example.bd_nube;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.HashMap;
-import java.util.Map;
-
-public class MainActivity extends AppCompatActivity {
+// Paso 1: Creamos las variables a utilizar (Fuera del OnCreate())
 
     FirebaseFirestore firestore;
     EditText nombres, apellidos, empresa, cargo, usuario, contrasena;
@@ -26,25 +6,9 @@ public class MainActivity extends AppCompatActivity {
     Button registro;
     int check; //1-masculino, 2-femenino
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        nombres = findViewById(R.id.ct_nombre);
-        apellidos = findViewById(R.id.ct_apellidos);
-        empresa = findViewById(R.id.ct_empresa);
-        cargo = findViewById(R.id.ct_cargo);
-        usuario = findViewById(R.id.ct_usuario);
-        contrasena = findViewById(R.id.ct_contrasena);
-        rbMasculino = findViewById(R.id.rb_masculino);
-        rbFemenino = findViewById(R.id.rb_femenino);
-        registro = findViewById(R.id.bt_registrarse);
 
-        nombres.requestFocus();
-
-        registro.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+// Paso 2: Obtener los datos que se introdujeron en el formulario
+       
                 String Nombres = nombres.getText().toString();
                 String Apellidos = apellidos.getText().toString();
                 String Empresa = empresa.getText().toString();
@@ -55,25 +19,33 @@ public class MainActivity extends AppCompatActivity {
                 if(genero == true) check = 1; //El rb Masculino fué seleccionado
                 else check = 2; //El rb Femenino fué seleccionado
 
+
+// Paso 3: Creamos la referencia a Firebase
+
                 firestore = FirebaseFirestore.getInstance();
 
-                Map<String,Object> usuarios = new HashMap<>();
-                usuarios.put("nombre",Nombres);
-                usuarios.put("apellido",Apellidos);
-                usuarios.put("empresa",Empresa);
-                usuarios.put("cargo",Cargo);
-                usuarios.put("usuario",Usuario);
-                usuarios.put("contrasena",Contrasena);
+// Paso 4: Encapsulamos los datos a guardar en Firebase 
 
-                firestore.collection("usuarios").add(usuarios).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                Map<String,Object> datos = new HashMap<>();
+                datos.put("nombre",Nombres);
+                datos.put("apellido",Apellidos);
+                datos.put("empresa",Empresa);
+                datos.put("cargo",Cargo);
+                datos.put("usuario",Usuario);
+                datos.put("contrasena",Contrasena);
+
+// Paso 5: Por último, creamos la conexión donde se guardarán los datos
+
+	//En este ejemplo la tabla en Firebase se llama "usuarios"
+                firestore.collection("usuarios").add(datos).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Toast.makeText(MainActivity.this, "Guardado satisfactorio", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "Guardado satisfactorio", Toast.LENGTH_LONG).show();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(MainActivity.this, "No se pudo guardar", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "No se pudo guardar", Toast.LENGTH_LONG).show();
                     }
                 });
             }
