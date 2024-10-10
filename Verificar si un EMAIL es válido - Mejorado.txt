@@ -1,0 +1,19 @@
+boolean respuesta = CORREO.matches("^[a-z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-z.-]+$");
+
+if (respuesta == true) {
+	//Ahora verificaremos que sea un dominio de correo existente: gmail, outlook, etc
+	String[] partes = CORREO.split("@");
+	String dominio = partes[1];
+	if(dominio.equals("gmail.com") || dominio.equals("outlook.com") || dominio.equals("outlook.es") ||
+	dominio.equals("live.com") || dominio.equals("live.es") || dominio.equals("yahoo.es") ||
+	dominio.equals("yahoo.com") || dominio.equals("hotmail.com")){
+		//El correo electrónico está correctio
+	}
+	
+} else {
+	Toast.makeText(MainActivity.this, "El correo tiene formato incorrecto",Toast.LENGTH_SHORT).show();
+	correo.requestFocus();
+}
+
+Nota: 
+CORREO es la variable con la que estamos vinculados al control en la interfaz gráfica
