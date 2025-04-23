@@ -1,4 +1,4 @@
-// Codificación de un login con Firebase
+// Ejemplo de Codificación de un login con Firebase utilizando Correo y Contraseña de consola Authentication
 
 public class MainActivity extends AppCompatActivity {
 
