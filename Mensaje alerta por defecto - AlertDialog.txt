@@ -1,0 +1,20 @@
+AlertDialog.Builder alerta = new AlertDialog.Builder(getApplicationContext());
+alerta.setTitle("Advertencia");
+alerta.setMessage("¿Está seguro de finalizar el Test?");
+alerta.setCancelable(false);
+alerta.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+
+@Override
+public void onClick(DialogInterface dialogInterface, int i) {
+                guardar();
+          }
+});
+
+alerta.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+          @Override
+           public void onClick(DialogInterface dialogInterface, int i) {
+                     finish();
+           }
+});
+
+alerta.show();
