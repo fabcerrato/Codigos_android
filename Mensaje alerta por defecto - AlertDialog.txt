@@ -1,20 +1,25 @@
-AlertDialog.Builder alerta = new AlertDialog.Builder(getApplicationContext());
-alerta.setTitle("Advertencia");
-alerta.setMessage("¿Está seguro de finalizar el Test?");
-alerta.setCancelable(false);
-alerta.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-
-@Override
-public void onClick(DialogInterface dialogInterface, int i) {
-                guardar();
-          }
-});
-
-alerta.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-          @Override
-           public void onClick(DialogInterface dialogInterface, int i) {
-                     finish();
+//DENTRO DE ALGUN CONTROL, POR EJEMPLO UN BOTÓN
+BT_borrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+	mostrarDialogo();	
            }
 });
 
-alerta.show();
+
+
+//FUERA DEL ONCREATE()
+
+private void mostrarDialogo() {
+        new AlertDialog.Builder(MainActivity2.this)
+                .setTitle("Advertencia")
+                .setMessage("¿Deseas eliminar este registro?")
+                .setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(MainActivity2.this, "Registro eliminado", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Cancelar", null)
+                .show();
+    }
