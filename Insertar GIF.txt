@@ -10,3 +10,8 @@
 android:layout_width="wrap_content"
 android:layout_height="wrap_content"
 android:src="@drawable/Mi_gif" />
+
+****************************************************************************************************************************************
+Visitar el siguiente enlace para revisar la documentación de la librería:
+
+https://github.com/koral--/android-gif-drawable
