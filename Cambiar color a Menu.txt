@@ -1,0 +1,27 @@
+1. Abra el archivo: res/values/colors.xml y agregar las siguientes líneas (debajo del código ya existente):
+
+<color name="colorMenuBackground">#FFFFFF</color>  <!-- Color de fondo del menú -->
+<color name="colorMenuItemText">#000000</color>    <!-- Color del texto del menú -->
+
+
+
+
+
+2. Abra los dos archivos dentro de la siguiente carpeta: res/values/themes y pegue las siguientes líneas (debajo del código ya existente):
+
+<!-- Cambiar el color de fondo del menú -->
+<item name="android:itemBackground">@color/colorMenuBackground</item>
+    
+<!-- Cambiar el color del texto del menú -->
+<item name="android:itemTextAppearance">@style/MenuTextAppearance</item>
+
+
+
+
+
+Paso 3: Crear el estilo para el texto del menú: En el mismo archivo themes.xml pegue el siguiente código (debajo del código ya existente):
+ 
+<style name="MenuTextAppearance" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+    <item name="android:textColor">@color/colorMenuItemText</item>
+    <item name="android:textSize">14sp</item>
+</style>
